@@ -93,7 +93,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  Ledoff(RED0);
+  LedOff(RED0);
   LedOff(GREEN0);
   LedOff(BLUE0);
 
