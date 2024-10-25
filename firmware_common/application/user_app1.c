@@ -93,7 +93,12 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  
+
+
+  for(u8 i =0; i < U8_TOTAL_LEDS; i++){
+    LedOff((LedNameType)i);
+  }
+
   /* If good initialization, set state to Idle */
   HEARTBEAT_OFF();
   if( 1 )
@@ -144,22 +149,40 @@ State Machine Function Definitions
 static void UserApp1SM_Idle
 (void)
 {
-     static u16 u16Counter = U16_COUNTER_PERIOD_MS;
-     static bool bLightIsOn = FALSE;
-    
-     u16Counter--;
-     if(u16Counter==0){
-      u16Counter = U16_COUNTER_PERIOD_MS;
 
-      if(bLightIsOn){
-        HEARTBEAT_OFF();
-        bLightIsOn = FALSE;
-      }
-      else{
-        HEARTBEAT_ON();
-        bLightIsOn = TRUE;
-      }
-     }
+
+  static bRed1Blink = FALSE;
+  static LedRateType aeBlinkRate[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
+  static u8 u8BlinkRateIndex = 0;
+
+  if(WasButtonPressed(BUTTON1)){
+    ButtonAcknowledge(BUTTON1);
+    if(!bRed1Blink){
+      bRed1Blink = TRUE;
+      LedBlink(RED1, aeBlinkRate[u8BlinkRateIndex]);
+      ButtonAcknowledge(BUTTON0);
+    }else{
+      bRed1Blink = FALSE;
+      LedOff(RED1);
+    }
+  }
+  if(WasButtonPressed(BUTTON0) && bRed1Blink){
+    ButtonAcknowledge(BUTTON0);
+    u8BlinkRateIndex++;
+    if(u8BlinkRateIndex == (sizeof(aeBlinkRate)/sizeof(LedRateType))){
+      u8BlinkRateIndex = 0;
+    }
+    LedBlink(RED1, aeBlinkRate[u8BlinkRateIndex]);
+  }
+
+  if(IsButtonHeld(BUTTON0,2000)){
+    LedOn(LCD_BL);
+  }else{
+    LedOff(LCD_BL);
+  }
+
+     
+
 } /* end UserApp1SM_Idle() */
      
 
