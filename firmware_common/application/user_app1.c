@@ -3,6 +3,7 @@
 @brief User's tasks / applications are written here.  This description
 should be replaced by something specific to the task.
 
+Test change yay
 ----------------------------------------------------------------------------------------------------------------------
 To start a new task using this user_app1 as a template:
  1. Copy both user_app1.c and user_app1.h to the Application directory
@@ -93,11 +94,13 @@ Promises:
 void UserApp1Initialize(void)
 {
 
+
   for(u8 i =0; i < U8_TOTAL_LEDS; i++){
     LedOff((LedNameType)i);
   }
 
   /* If good initialization, set state to Idle */
+  HEARTBEAT_OFF();
   if( 1 )
   {
     UserApp1_pfStateMachine = UserApp1SM_Idle;
@@ -143,8 +146,10 @@ State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* What does this state do? */
-static void UserApp1SM_Idle(void)
+static void UserApp1SM_Idle
+(void)
 {
+
 
   static bRed1Blink = FALSE;
   static LedRateType aeBlinkRate[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
@@ -177,6 +182,7 @@ static void UserApp1SM_Idle(void)
   }
 
      
+
 } /* end UserApp1SM_Idle() */
      
 
