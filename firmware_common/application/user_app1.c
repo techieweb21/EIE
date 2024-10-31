@@ -175,6 +175,7 @@ static void UserApp1SM_Idle(void){
     }
     if(correct == 1){
       LedOff(RED2);
+      LedOff(RED0);
       light =1;
       LedOff(GREEN2);
       LedBlink(GREEN2, LED_2HZ);
@@ -182,7 +183,11 @@ static void UserApp1SM_Idle(void){
 
     }else{
       LedOn(RED0);
-
+      correct =1;
+      for(int i =0; i<10; i++){
+        guess[i] = 9;
+      }
+      pos = 0;
     }
   }
   if(WasButtonPressed(BUTTON1)){
