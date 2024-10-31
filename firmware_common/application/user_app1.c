@@ -146,11 +146,63 @@ State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* What does this state do? */
-static void UserApp1SM_Idle
-(void)
-{
+static void UserApp1SM_Idle(void){
+  static u16 u16BlinkCount = 0;
+  static u8 u8Counter = 0;
+  static u8 u8ColourIndex = 0;
+  static int password[] = {0,1,1,0,9,9,9,9,9,9,9,9};
+  static int guess[] = {9,9,9,9,9,9,9,9,9,9,9,9};
+  static int pos = 0;
+  static int correct = 1;
+  static int light = 0;
+
+  static u8 aau8Colour[][3] = {{RED0, 0xff, 0xff}, {RED0, GREEN0, 0xff}, {0xff, GREEN0, 0xff}, {0xff, GREEN0, BLUE0}, {0xff, 0xff, BLUE0}, 
+  {RED0, 0xff, BLUE0}, {RED0, GREEN0,BLUE0}};
+  if(light ==0){
+    for(u8 j =0; j<3; j++){
+      if(aau8Colour[1][j] != 0xff){
+        LedOn((aau8Colour[1][j])+2);
+      }
+    }
+  }
+  if(IsButtonHeld(BUTTON0, 2000)&& IsButtonHeld(BUTTON1, 2000)){
+    guess[pos-1] = 9;
+    guess[pos-2] = 9;
+    for(int i =0; i<10; i++){
+      if(password[i] != guess[i]){
+        correct =0;
+      }
+    }
+    if(correct == 1){
+      LedOff(RED2);
+      light =1;
+      LedOff(GREEN2);
+      LedBlink(GREEN2, LED_2HZ);
+      
+
+    }else{
+      LedOn(RED0);
+
+    }
+  }
+  if(WasButtonPressed(BUTTON1)){
+    ButtonAcknowledge(BUTTON1);
+    guess[pos] = 1;
+    pos++;
+  }
+  if(WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
+    guess[pos] = 0;
+    pos++;
+  }
+  
+  
 
 
+  
+
+
+/*   
   static bRed1Blink = FALSE;
   static LedRateType aeBlinkRate[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
   static u8 u8BlinkRateIndex = 0;
@@ -182,7 +234,7 @@ static void UserApp1SM_Idle
   }
 
      
-
+*/
 } /* end UserApp1SM_Idle() */
      
 
