@@ -149,40 +149,42 @@ State Machine Function Definitions
 static void UserApp1SM_Idle
 (void)
 {
-
-
-  static bRed1Blink = FALSE;
-  static LedRateType aeBlinkRate[] = {LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ};
-  static u8 u8BlinkRateIndex = 0;
+  static int up = 1;
+  static u16 au16Notes[] = {C4, C4S, D4, D4S, E4, F4,F4S, G4,G4S ,A4,A4S,B4,C5};
+  static u8 u8NoteIndex = 0;
 
   if(WasButtonPressed(BUTTON1)){
     ButtonAcknowledge(BUTTON1);
-    if(!bRed1Blink){
-      bRed1Blink = TRUE;
-      LedBlink(RED1, aeBlinkRate[u8BlinkRateIndex]);
-      ButtonAcknowledge(BUTTON0);
-    }else{
-      bRed1Blink = FALSE;
-      LedOff(RED1);
+    if(up ==1){
+      LedOn(RED0);
+      LedOff(GREEN0);
+      if(u8NoteIndex == (u8)(sizeof(au16Notes)/sizeof(u16))-1){
+        up = 0;
+        u8NoteIndex--;
+      }else{
+        u8NoteIndex++;
+      }
+    }else if(up ==0){
+      LedOff(RED0);
+      LedOn(GREEN0);
+      if(u8NoteIndex == 0){
+        up = 1;
+        u8NoteIndex++;
+      }else{
+        u8NoteIndex--;
+      }
     }
   }
-  if(WasButtonPressed(BUTTON0) && bRed1Blink){
-    ButtonAcknowledge(BUTTON0);
-    u8BlinkRateIndex++;
-    if(u8BlinkRateIndex == (sizeof(aeBlinkRate)/sizeof(LedRateType))){
-      u8BlinkRateIndex = 0;
-    }
-    LedBlink(RED1, aeBlinkRate[u8BlinkRateIndex]);
-  }
-
-  if(IsButtonHeld(BUTTON0,2000)){
-    LedOn(LCD_BL);
+  
+  if(IsButtonPressed(BUTTON0)){
+    PWMAudioSetFrequency(BUZZER1, au16Notes[u8NoteIndex]);
+    PWMAudioOn(BUZZER1);
   }else{
-    LedOff(LCD_BL);
+    PWMAudioOff(BUZZER1);
   }
+  
 
-     
-
+  
 } /* end UserApp1SM_Idle() */
      
 
