@@ -241,6 +241,7 @@ def build(ctx):
         "firmware_ascii/drivers",
     ]
     dot_matrix_folders = [
+        "firmware_doxmatrix/application",
         "firmware_dotmatrix/bsp/",
         "firmware_dotmatrix/drivers",
         "firmware_dotmatrix/libraries/captouch",
