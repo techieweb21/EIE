@@ -144,7 +144,11 @@ State Machine Function Definitions
 static void UserApp1SM_Idle
 (void)
 {
-
+  PixelBlockType sPixelsToClear = {0, 127, 25, 30};
+  sPixelsToClear.u16RowStart = 0;
+  sPixelsToClear.u16ColumnStart = 0;
+  sPixelsToClear.u16RowSize = 25;
+  sPixelsToClear.u16ColumnSize = 30;
      
 
 } /* end UserApp1SM_Idle() */
